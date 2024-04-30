@@ -100,14 +100,29 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "GROUP",
-    "name": "Section 3 - Properties Override",
-    "displayName": "Properties Override",
+    "name": "Section 3 - Parameter Override",
+    "displayName": "Parameter Override",
     "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
       {
         "type": "LABEL",
-        "name": "Properties Override Description",
-        "displayName": "You may manually configure properties here, which will override the default configuration."
+        "name": "Parameter Override Description",
+        "displayName": "You may manually configure parameters here, which will override the default configuration."
+      },
+      {
+        "type": "GROUP",
+        "name": "Test Event Configurations",
+        "displayName": "Test Event Configurations",
+        "groupStyle": "NO_ZIPPY",
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "test_event_code",
+            "displayName": "Test Event Code",
+            "simpleValueType": true,
+            "help": "After Events API setup, you can test if your events have been setup and received correctly by TikTok. \u003ca href\u003d\"https://ads.tiktok.com/marketing_api/docs?id\u003d1739584863252481\"\u003e Learn More\u003c/a\u003e"
+          }
+        ]
       },
       {
         "type": "GROUP",
@@ -502,13 +517,6 @@ ___TEMPLATE_PARAMETERS___
             "name": "timestamp",
             "displayName": "Timestamp",
             "simpleValueType": true
-          },
-          {
-            "type": "TEXT",
-            "name": "test_event_code",
-            "displayName": "Test Event Code",
-            "simpleValueType": true,
-            "help": "After Events API setup, you can test if your events have been setup and received correctly by TikTok. \u003ca href\u003d\"https://ads.tiktok.com/marketing_api/docs?id\u003d1739584863252481\"\u003e Learn More\u003c/a\u003e"
           }
         ]
       }
@@ -675,7 +683,7 @@ function getTtpCookie() {
 
 function getTtclid() {
   return (
-    getTtclidFromUrl() || data.ttclid || eventData.ttclid || getTtclidCookie()
+    getTtclidFromUrl() || getTtclidCookie() || data.ttclid || eventData.ttclid
   );
 }
 
@@ -826,7 +834,7 @@ function getBody(ttclid, ttp) {
 
   if (data.pixel_code) body.pixel_code = data.pixel_code;
   if (_event) body.event = TTEventMap[_event] || _event;
-  if (data.event_id) body.event_id = data.event_id;
+  if (data.event_id || eventData.event_id) body.event_id = data.event_id || eventData.event_id;
   if (data.timestamp) body.timestamp = data.timestamp;
   if (data.test_event_code) body.test_event_code = data.test_event_code;
 
@@ -852,7 +860,7 @@ function getBody(ttclid, ttp) {
     if (ch.architecture) device.architecture = ch.architecture;
     if (ch.bitness) device.bitness = ch.bitness;
     if (ch.full_version_list) device.browser_version_list = ch.full_version_list;
-    if (ch.mobile) device.mobile = ch.mobile;
+    if (ch.mobile != undefined) device.mobile = ch.mobile;
     if (ch.model) device.model = ch.model;
     if (ch.platform) device.platform = ch.platform;
     if (ch.platform_version) device.platform_version = ch.platform_version;

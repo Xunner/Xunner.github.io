@@ -157,14 +157,14 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "GROUP",
-    "name": "Section 3 - Properties Override",
-    "displayName": "Properties Override",
+    "name": "Section 3 - Parameter Override",
+    "displayName": "Parameter Override",
     "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
       {
         "type": "LABEL",
-        "name": "Properties Override Description",
-        "displayName": "You may manually configure properties here, which will override the default configuration."
+        "name": "Parameter Override Description",
+        "displayName": "You may manually configure parameters here, which will override the default configuration."
       },
       {
         "type": "GROUP",
@@ -784,27 +784,26 @@ const getEcommerceData = (data, ecommerce) => {
     log("1b. Enhanced Ecommerce - Unable to detect any ecommerce data layers");
   }
 
-  if (ecommerce) {
-    if (data.ecomm_currency)
-      currency = data.ecomm_currency;
-    else if (ecommerce.currencyCode)
-      currency = ecommerce.currencyCode;
-    else if (ecommerce.currency)
-      currency = ecommerce.currency;
-    else if (eventModel && eventModel.currency)
-      currency = eventModel.currency;
+  if (data.ecomm_currency)
+    currency = data.ecomm_currency;
+  else if (ecommerce && ecommerce.currencyCode)
+    currency = ecommerce.currencyCode;
+  else if (ecommerce && ecommerce.currency)
+    currency = ecommerce.currency;
+  else if (eventModel && eventModel.currency)
+    currency = eventModel.currency;
 
-    if (ecommerce.value) {
-      value = ecommerce.value;
-    } else if (
-      ecommerce.purchase &&
-      ecommerce.purchase.actionField &&
-      ecommerce.purchase.actionField.revenue
-    ) {
-      value = ecommerce.purchase.actionField.revenue;
-    } else if (eventModel && eventModel.value) {
-      value = eventModel.value;
-    }
+  if (ecommerce && ecommerce.value) {
+    value = ecommerce.value;
+  } else if (
+    ecommerce && 
+    ecommerce.purchase &&
+    ecommerce.purchase.actionField &&
+    ecommerce.purchase.actionField.revenue
+  ) {
+    value = ecommerce.purchase.actionField.revenue;
+  } else if (eventModel && eventModel.value) {
+    value = eventModel.value;
   }
 
   return {
